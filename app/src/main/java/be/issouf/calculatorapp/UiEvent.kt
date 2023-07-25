@@ -22,7 +22,7 @@ sealed class UiEvent(
 
     object OnClear : UiEvent()
     object OnClearAll : UiEvent()
-    object OnEgal : UiEvent()
+    object OnEgalClicked : UiEvent()
 
 
 

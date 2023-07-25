@@ -2,8 +2,8 @@ package be.issouf.calculatorapp
 
 enum class CalculationOperator(val symbols: String? = null) {
     NONE,
-    ADDITION("*"),
+    ADDITION("+"),
     SUBSTRACTION("-"),
-    MULTUPLICATION("+"),
+    MULTUPLICATION("*"),
     DIVISION(":")
 }

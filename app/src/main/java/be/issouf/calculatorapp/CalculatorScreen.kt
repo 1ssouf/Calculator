@@ -30,10 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.issouf.calculatorapp.ui.theme.CalculatorAppTheme
+import java.text.DecimalFormat
 
 @Composable
-fun CalculatorScreen(){
+fun CalculatorScreen(viewModel: CalculatorViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
+
+    val uiState = viewModel.uiState
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
@@ -45,7 +48,7 @@ fun CalculatorScreen(){
                 .align(Alignment.BottomCenter)
             ) {
                 Text(
-                    text = "1 + 1",
+                    text = uiState.value.calculationExpression,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -56,7 +59,11 @@ fun CalculatorScreen(){
                     )
                 )
                 Text(
-                    text = "2",
+                    text = if (uiState.value.answer.isNotEmpty())
+                        DecimalFormat("###.#").format(uiState.value.answer.toDouble())
+                    else if (uiState.value.currentOperator == CalculationOperator.NONE)
+                        DecimalFormat("###.#").format(uiState.value.firstNumber.toDouble())
+                    else DecimalFormat("###.#").format(uiState.value.seconNumber.toDouble()),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -84,25 +91,25 @@ fun CalculatorScreen(){
                     modifier = Modifier.weight(1f),
                     character = "CA",
                     isHighLight = true,
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.OnClearAll)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "/",
                     isHighLight = true,
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.OnDivideClicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "X",
                     isHighLight = true,
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.OnTimesClicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     icon = Icons.Default.ArrowBack,
                     isHighLight = true,
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.OnClear)}
                 )
 
             }
@@ -115,25 +122,24 @@ fun CalculatorScreen(){
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "7",
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On7Clicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "8",
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On8Clicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "9",
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On9Clicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "-",
                     isHighLight = true,
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.OnMinusClicked)}
                 )
-
             }
             Row(
                 modifier = Modifier
@@ -144,23 +150,23 @@ fun CalculatorScreen(){
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "4",
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On4Clicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "5",
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On5Clicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "6",
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On6Clicked)}
                 )
                 ActionCalculator(
                     modifier = Modifier.weight(1f),
                     character = "+",
                     isHighLight = true,
-                    onActionCalculatorClick = {}
+                    onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.OnPlusClicked)}
                 )
 
             }
@@ -178,17 +184,17 @@ fun CalculatorScreen(){
                         ActionCalculator(
                             modifier = Modifier.weight(1f),
                             character = "1",
-                            onActionCalculatorClick = {}
+                            onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On1Clicked)}
                         )
                         ActionCalculator(
                             modifier = Modifier.weight(1f),
                             character = "2",
-                            onActionCalculatorClick = {}
+                            onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On2Clicked)}
                         )
                         ActionCalculator(
                             modifier = Modifier.weight(1f),
                             character = "3",
-                            onActionCalculatorClick = {}
+                            onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On3Clicked)}
                         )
                     }
                     Row(
@@ -200,7 +206,7 @@ fun CalculatorScreen(){
                         ActionCalculator(
                             modifier = Modifier.weight(3f),
                             character = "0",
-                            onActionCalculatorClick = {}
+                            onActionCalculatorClick = {viewModel.onUiEvent(UiEvent.On0Clicked)}
                         )
                     }
                 }
@@ -215,7 +221,7 @@ fun CalculatorScreen(){
                             .width(60.dp)
                             .background(MaterialTheme.colorScheme.secondary)
                             .align(Alignment.Center)
-                            .clickable {}
+                            .clickable {viewModel.onUiEvent(UiEvent.OnEgalClicked)}
                     ){
                         Text(
                             text = "=",
